@@ -13,8 +13,9 @@ import os
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
-# Load the trained model
+# Load the trained model and scaler (8-feature pipeline)
 MODEL_PATH = Path(__file__).parent / 'model' / 'breast_cancer_model.pkl'
+SCALER_PATH = Path(__file__).parent / 'model' / 'scaler.pkl'
 
 try:
     # Try loading the model from the model directory
@@ -33,6 +34,24 @@ try:
 except Exception as e:
     model = None
     print(f"✗ Error loading model: {e}")
+
+# Load scaler (required for 8-feature model)
+try:
+    if SCALER_PATH.exists():
+        scaler = joblib.load(SCALER_PATH)
+        print(f"✓ Scaler loaded successfully from {SCALER_PATH}")
+    else:
+        # Fallback to root
+        root_scaler = Path(__file__).parent / 'scaler.pkl'
+        if root_scaler.exists():
+            scaler = joblib.load(root_scaler)
+            print(f"✓ Scaler loaded successfully from {root_scaler}")
+        else:
+            scaler = None
+            print("⚠ Warning: No scaler file found")
+except Exception as e:
+    scaler = None
+    print(f"✗ Error loading scaler: {e}")
 
 # Feature names (8 mean features from breast cancer dataset)
 FEATURE_NAMES = [
@@ -89,6 +108,15 @@ def predict():
             return jsonify({
                 'error': f'Invalid feature values: {str(e)}'
             }), 400
+
+        # Apply scaling if scaler is available
+        if scaler is not None:
+            try:
+                X = scaler.transform(X)
+            except Exception as e:
+                return jsonify({
+                    'error': f'Feature scaling failed: {str(e)}'
+                }), 500
         
         # Make prediction
         try:
