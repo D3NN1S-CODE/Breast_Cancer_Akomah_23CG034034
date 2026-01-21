@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-heartbeat"></i>
+                    <h1>Breast Cancer Prediction</h1>
+                </div>
+                <p class="tagline">Early Detection Saves Lives 💕</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Awareness Section -->
+            <section class="awareness-section">
+                <div class="awareness-card">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>About This Tool</h2>
+                    <p>This diagnostic tool uses machine learning to analyze tumor characteristics and provide a preliminary assessment. It is a demonstration tool and <strong>should not replace professional medical consultation</strong>.</p>
+                </div>
+            </section>
+
+            <!-- Prediction Section -->
+            <section class="prediction-section">
+                <div class="grid">
+                    <!-- Form Column -->
+                    <div class="form-container">
+                        <div class="form-header">
+                            <i class="fas fa-microscope"></i>
+                            <h2>Enter Diagnostic Features</h2>
+                        </div>
+                        
+                        <form id="predictionForm" class="prediction-form">
+                            <div class="form-grid">
+                                <!-- Radius Mean -->
+                                <div class="form-group">
+                                    <label for="radius_mean">Radius Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="radius_mean" 
+                                            name="radius_mean" 
+                                            step="0.01" 
+                                            placeholder="e.g., 14.5"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 6-28</span>
+                                    </div>
+                                </div>
+
+                                <!-- Texture Mean -->
+                                <div class="form-group">
+                                    <label for="texture_mean">Texture Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="texture_mean" 
+                                            name="texture_mean" 
+                                            step="0.01" 
+                                            placeholder="e.g., 19.2"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 9-40</span>
+                                    </div>
+                                </div>
+
+                                <!-- Perimeter Mean -->
+                                <div class="form-group">
+                                    <label for="perimeter_mean">Perimeter Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="perimeter_mean" 
+                                            name="perimeter_mean" 
+                                            step="0.01" 
+                                            placeholder="e.g., 91.5"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 43-188</span>
+                                    </div>
+                                </div>
+
+                                <!-- Area Mean -->
+                                <div class="form-group">
+                                    <label for="area_mean">Area Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="area_mean" 
+                                            name="area_mean" 
+                                            step="0.01" 
+                                            placeholder="e.g., 654.8"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 143-2501</span>
+                                    </div>
+                                </div>
+
+                                <!-- Smoothness Mean -->
+                                <div class="form-group">
+                                    <label for="smoothness_mean">Smoothness Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="smoothness_mean" 
+                                            name="smoothness_mean" 
+                                            step="0.001" 
+                                            placeholder="e.g., 0.096"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 0.05-0.16</span>
+                                    </div>
+                                </div>
+
+                                <!-- Compactness Mean -->
+                                <div class="form-group">
+                                    <label for="compactness_mean">Compactness Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="compactness_mean" 
+                                            name="compactness_mean" 
+                                            step="0.001" 
+                                            placeholder="e.g., 0.104"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 0.02-0.35</span>
+                                    </div>
+                                </div>
+
+                                <!-- Concavity Mean -->
+                                <div class="form-group">
+                                    <label for="concavity_mean">Concavity Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="concavity_mean" 
+                                            name="concavity_mean" 
+                                            step="0.001" 
+                                            placeholder="e.g., 0.088"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 0-0.43</span>
+                                    </div>
+                                </div>
+
+                                <!-- Symmetry Mean -->
+                                <div class="form-group">
+                                    <label for="symmetry_mean">Symmetry Mean</label>
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="number" 
+                                            id="symmetry_mean" 
+                                            name="symmetry_mean" 
+                                            step="0.001" 
+                                            placeholder="e.g., 0.181"
+                                            required
+                                        >
+                                        <span class="range-hint">Range: 0.10-0.30</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-predict" id="predictBtn">
+                                    <i class="fas fa-play"></i>
+                                    <span>Predict</span>
+                                </button>
+                                <button type="reset" class="btn btn-reset" id="resetBtn">
+                                    <i class="fas fa-redo"></i>
+                                    <span>Clear</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Result Column -->
+                    <div class="result-container" id="resultContainer" style="display: none;">
+                        <div class="result-card" id="resultCard">
+                            <div class="result-header">
+                                <i class="fas fa-stethoscope"></i>
+                                <h2>Prediction Result</h2>
+                            </div>
+                            
+                            <div class="result-content">
+                                <div class="diagnosis-box" id="diagnosisBox">
+                                    <div class="diagnosis-label">Diagnosis:</div>
+                                    <div class="diagnosis-value" id="diagnosisValue">--</div>
+                                </div>
+                                
+                                <div class="confidence-section">
+                                    <div class="confidence-label">Confidence Level:</div>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="confidenceFill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="confidence-text">
+                                        <span id="confidenceValue">0</span>%
+                                    </div>
+                                </div>
+                                
+                                <div class="result-message" id="resultMessage">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <p>Please consult with a healthcare professional for accurate diagnosis.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encouragement Section -->
+            <section class="encouragement-section">
+                <div class="encouragement-content">
+                    <p class="encouragement-text">
+                        💕 <strong>Remember:</strong> Early detection saves lives. You are not alone. 💕
+                    </p>
+                    <p class="encouragement-subtext">
+                        This is a demonstration tool. Please consult healthcare professionals for actual medical diagnosis.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Breast Cancer Prediction System | Educational & Demonstration Tool</p>
+            <p>Created for CSC334 | Not for clinical use</p>
+        </footer>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="loading-modal" id="loadingModal">
+        <div class="spinner"></div>
+        <p>Processing prediction...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
